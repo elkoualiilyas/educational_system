@@ -1,21 +1,21 @@
 {% extends "bawabati_app/base.html" %}
 
-{% block title %}{{ course.title }} - Bawabati{% endblock %}
+{% block title %}{{ page_title }} - Bawabati{% endblock %}
 
 {% block content %}
 <div class="container-fluid">
-    <div class="card mb-4">
+    <div class="card mb-4 shadow">
         <div class="card-header bg-primary text-white">
             <div class="d-flex justify-content-between align-items-center">
                 <h2 class="mb-0">{{ course.title }}</h2>
                 
-                {% if user.userprofile.role == 'admin' %}
+                {% if is_admin or is_instructor %}
                 <div>
                     <a href="{% url 'course_update' course.id %}" class="btn btn-warning btn-sm">
                         <i class="fas fa-edit"></i> Edit
                     </a>
                     <a href="{% url 'course_delete' course.id %}" class="btn btn-danger btn-sm">
-                        <i class="fas fa-trash"></i> Delete
+                        <i class="fas fa-trash"></i> Remove
                     </a>
                 </div>
                 {% endif %}
@@ -27,40 +27,72 @@
                     <h5 class="text-muted mb-3">Description:</h5>
                     <p>{{ course.description }}</p>
                     
-                    <h5 class="text-muted mt-4 mb-3">Teacher:</h5>
-                    <p>{{ course.assigned_teacher.get_full_name|default:course.assigned_teacher.username }}</p>
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h5 class="text-muted mb-3">Teacher:</h5>
+                            <p>
+                                {% if course.instructor %}
+                                    <i class="fas fa-chalkboard-teacher me-2"></i>
+                                    {{ course.instructor.get_full_name|default:course.instructor.username }}
+                                {% else %}
+                                    <i class="fas fa-user-slash me-2"></i> Not Assigned
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="text-muted mb-3">Course Dates:</h5>
+                            <p><i class="fas fa-calendar-alt me-2"></i> {{ course.start_date|date:"M d, Y" }} - {{ course.end_date|date:"M d, Y" }}</p>
+                            
+                            <p class="mt-2">
+                                <span class="badge {% if course_active %}bg-success{% else %}bg-secondary{% endif %} p-2">
+                                    {% if course_active %}
+                                        <i class="fas fa-check-circle me-1"></i> Active Course
+                                    {% else %}
+                                        {% if course.start_date > current_time.date %}
+                                            <i class="fas fa-clock me-1"></i> Upcoming Course
+                                        {% else %}
+                                            <i class="fas fa-history me-1"></i> Completed Course
+                                        {% endif %}
+                                    {% endif %}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
                     
-                    {% if user.userprofile.role == 'student' and not is_enrolled %}
+                    {% if user.userprofile.role == 'student' %}
                     <div class="mt-4">
                         <a href="{% url 'enroll_course' course.id %}" class="btn btn-success">
-                            <i class="fas fa-user-plus me-1"></i> Enroll in this Course
+                            <i class="fas fa-user-plus me-1"></i> Join this Course
                         </a>
                     </div>
                     {% endif %}
                 </div>
                 
                 <div class="col-md-4">
-                    <div class="card">
+                    <div class="card shadow-sm">
                         <div class="card-header bg-light">
                             <h5 class="mb-0">Course Information</h5>
                         </div>
                         <div class="card-body">
-                            {% if user.userprofile.role == 'admin' or user == course.assigned_teacher %}
                             <p>
-                                <strong>Enrolled Students:</strong> 
-                                <span class="badge bg-success">{{ enrolled_students.count }}</span>
-                            </p>
-                            {% endif %}
-                            
-                            <p>
-                                <strong>Notes:</strong> 
+                                <strong><i class="fas fa-book me-2"></i>Course Materials:</strong> 
                                 <span class="badge bg-info">{{ notes.count }}</span>
                             </p>
                             
-                            {% if user.userprofile.role == 'teacher' and user == course.assigned_teacher or user.userprofile.role == 'admin' %}
-                            <div class="d-grid gap-2 mt-3">
-                                <a href="{% url 'note_create' %}?course={{ course.id }}" class="btn btn-info btn-sm">
-                                    <i class="fas fa-file-upload me-1"></i> Upload Note
+                            <p>
+                                <strong><i class="fas fa-users me-2"></i>Capacity:</strong> 
+                                <span class="badge bg-primary">{{ course.capacity }} students</span>
+                            </p>
+                            
+                            <p>
+                                <strong><i class="fas fa-clock me-2"></i>Created:</strong> 
+                                {{ course.created_at|date:"M d, Y" }}
+                            </p>
+                            
+                            {% if is_instructor or is_admin %}
+                            <div class="d-grid gap-2 mt-4">
+                                <a href="{% url 'note_create' %}?course={{ course.id }}" class="btn btn-info">
+                                    <i class="fas fa-file-upload me-1"></i> Upload Course Material
                                 </a>
                             </div>
                             {% endif %}
@@ -71,10 +103,10 @@
         </div>
     </div>
     
-    <!-- Notes Section -->
-    <div class="card mb-4">
+    <!-- Course Materials Section -->
+    <div class="card mb-4 shadow">
         <div class="card-header bg-info text-white">
-            <h3 class="card-title mb-0">Course Notes</h3>
+            <h3 class="card-title mb-0">Course Materials</h3>
         </div>
         <div class="card-body">
             {% if notes %}
@@ -91,17 +123,54 @@
                     <tbody>
                         {% for note in notes %}
                         <tr>
-                            <td>{{ note.title }}</td>
-                            <td>{{ note.uploaded_by.get_full_name|default:note.uploaded_by.username }}</td>
-                            <td>{{ note.upload_date|date:"M d, Y" }}</td>
                             <td>
+                                <i class="fas {% if note.file %}fa-file-alt{% else %}fa-align-left{% endif %} me-2"></i>
+                                {{ note.title }}
+                            </td>
+                            <td>
+                                <i class="fas fa-user me-1"></i>
+                                {{ note.uploaded_by.get_full_name|default:note.uploaded_by.username }}
+                            </td>
+                            <td>
+                                <i class="fas fa-calendar me-1"></i>
+                                {{ note.created_at|date:"M d, Y" }}
+                            </td>
+                            <td>
+                                {% if note.file %}
                                 <a href="{{ note.file.url }}" class="btn btn-sm btn-primary" download>
                                     <i class="fas fa-download me-1"></i> Download
                                 </a>
+                                {% endif %}
                                 
-                                {% if user.userprofile.role == 'admin' or user == note.uploaded_by and user.userprofile.role == 'teacher' %}
+                                {% if note.content %}
+                                <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#noteModal{{ note.id }}">
+                                    <i class="fas fa-eye me-1"></i> View Content
+                                </button>
+                                
+                                <!-- Modal for note content -->
+                                <div class="modal fade" id="noteModal{{ note.id }}" tabindex="-1" aria-labelledby="noteModalLabel{{ note.id }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="noteModalLabel{{ note.id }}">{{ note.title }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="note-content">
+                                                    {{ note.content|linebreaks }}
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                
+                                {% if is_admin or user == note.uploaded_by and is_teacher %}
                                 <a href="{% url 'note_delete' note.id %}" class="btn btn-sm btn-danger">
-                                    <i class="fas fa-trash me-1"></i> Delete
+                                    <i class="fas fa-trash me-1"></i> Remove
                                 </a>
                                 {% endif %}
                             </td>
@@ -112,49 +181,15 @@
             </div>
             {% else %}
             <div class="alert alert-info">
-                No notes available for this course.
-                {% if user.userprofile.role == 'teacher' and user == course.assigned_teacher or user.userprofile.role == 'admin' %}
-                <a href="{% url 'note_create' %}?course={{ course.id }}">Upload the first note</a>
+                <i class="fas fa-info-circle me-2"></i>
+                No course materials available.
+                {% if is_instructor or is_admin %}
+                <a href="{% url 'note_create' %}?course={{ course.id }}" class="alert-link">Upload the first material</a>
                 {% endif %}
             </div>
             {% endif %}
         </div>
     </div>
-    
-    <!-- Enrolled Students Section (Only for Teacher and Admin) -->
-    {% if user.userprofile.role == 'admin' or user == course.assigned_teacher %}
-    <div class="card">
-        <div class="card-header bg-success text-white">
-            <h3 class="card-title mb-0">Enrolled Students</h3>
-        </div>
-        <div class="card-body">
-            {% if enrolled_students %}
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Student</th>
-                            <th>Email</th>
-                            <th>Enrollment Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for enrollment in enrolled_students %}
-                        <tr>
-                            <td>{{ enrollment.student.get_full_name|default:enrollment.student.username }}</td>
-                            <td>{{ enrollment.student.email }}</td>
-                            <td>{{ enrollment.enrollment_date|date:"M d, Y" }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            {% else %}
-            <div class="alert alert-info">No students enrolled in this course yet.</div>
-            {% endif %}
-        </div>
-    </div>
-    {% endif %}
 </div>
 {% endblock %}
  

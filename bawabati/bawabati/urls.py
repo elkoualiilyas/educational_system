@@ -24,7 +24,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('bawabati_app.urls')),  # Include the main app URLs
     path('api/', include('bawabati_app.urls')),  # API endpoints
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+# Add media URL mapping for development
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # Add debug toolbar URLs if in debug mode
 if settings.DEBUG:

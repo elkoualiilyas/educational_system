@@ -1,0 +1,123 @@
+.course-card {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: #fff;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.course-card-image {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+}
+
+.course-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.course-card:hover .course-card-image img {
+  transform: scale(1.05);
+}
+
+.course-card-badge {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.75);
+  color: white;
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.course-card-body {
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.course-title {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-weight: 600;
+  font-size: 1.2rem;
+  line-height: 1.4;
+}
+
+.course-title a {
+  color: #2d3748;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.course-title a:hover {
+  color: #4299e1;
+}
+
+.course-instructor {
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+}
+
+.course-instructor i {
+  margin-right: 5px;
+  color: #4a5568;
+}
+
+.course-description {
+  color: #4a5568;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+
+.course-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 15px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.course-date {
+  color: #718096;
+  font-size: 0.8rem;
+}
+
+.course-date i {
+  margin-right: 5px;
+}
+
+.btn-primary {
+  background-color: #4299e1;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: #3182ce;
+} 

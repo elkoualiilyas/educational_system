@@ -1,0 +1,98 @@
+.user-card {
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.user-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.user-card-header {
+  position: relative;
+  padding-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid white;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.role-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: white;
+}
+
+.role-badge.danger {
+  background-color: var(--danger-color);
+}
+
+.role-badge.info {
+  background-color: var(--info-color);
+}
+
+.role-badge.success {
+  background-color: var(--success-color);
+}
+
+.role-badge.secondary {
+  background-color: var(--gray-color);
+}
+
+.user-card-body {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.user-name {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--dark-color);
+}
+
+.user-email {
+  margin: 0.5rem 0;
+  font-size: 0.85rem;
+  color: var(--gray-color);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-joined {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--gray-color);
+}
+
+.user-joined i {
+  margin-right: 5px;
+}
+
+.user-card-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.85rem;
+} 

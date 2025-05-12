@@ -1,0 +1,79 @@
+.stat-card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  position: relative;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background-color: var(--primary-color);
+  opacity: 0.7;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1.2rem;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.stat-icon.primary {
+  background-color: var(--primary-color);
+}
+
+.stat-icon.success {
+  background-color: var(--success-color);
+}
+
+.stat-icon.info {
+  background-color: var(--info-color);
+}
+
+.stat-icon.warning {
+  background-color: var(--warning-color);
+}
+
+.stat-icon.danger {
+  background-color: var(--danger-color);
+}
+
+.stat-info {
+  flex: 1;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.stat-title {
+  font-size: 0.9rem;
+  color: var(--gray-color);
+  margin: 0;
+  margin-top: 0.25rem;
+} 

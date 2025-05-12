@@ -1,8 +1,10 @@
-Django>=5.2
+Django>=4.2.9
 django-debug-toolbar>=5.1.0
 mysqlclient>=2.2.0
 PyMySQL>=1.1.0  # For MySQL connection
-Pillow>=10.0.0  # For image handling
-python-dotenv>=1.0.0  # For environment variables
+Pillow>=10.1.0
+python-dotenv>=1.0.0
 django-crispy-forms>=2.0  # For better form rendering
-crispy-bootstrap5>=0.7  # Bootstrap 5 template pack for crispy-forms 
+crispy-bootstrap5>=0.7  # Bootstrap 5 template pack for crispy-forms
+django-cors-headers>=4.3.1
+djangorestframework>=3.14.0 

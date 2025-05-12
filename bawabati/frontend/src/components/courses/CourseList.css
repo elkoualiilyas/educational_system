@@ -1,0 +1,130 @@
+.course-list-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.course-list-title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+  text-align: center;
+  position: relative;
+}
+
+.course-list-title::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: #3498db;
+  margin: 0.5rem auto;
+  border-radius: 2px;
+}
+
+.course-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.course-grid-item {
+  transition: transform 0.3s ease;
+}
+
+.course-grid-item:hover {
+  transform: translateY(-5px);
+}
+
+/* Loading state */
+.courses-loading {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.spinner {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(52, 152, 219, 0.3);
+  border-radius: 50%;
+  border-top-color: #3498db;
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error state */
+.courses-error {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #e74c3c;
+}
+
+.courses-error i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.btn-retry {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.3s;
+}
+
+.btn-retry:hover {
+  background-color: #2980b9;
+}
+
+/* Empty state */
+.courses-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #7f8c8d;
+}
+
+.courses-empty i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.courses-empty h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .course-list-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+  
+  .course-list-title {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .course-list-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .course-list-container {
+    padding: 1.5rem 0.75rem;
+  }
+  
+  .course-list-title {
+    font-size: 1.5rem;
+  }
+} 
