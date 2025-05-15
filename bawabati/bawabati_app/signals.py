@@ -5,14 +5,18 @@ from django.db import transaction
 from .models import UserProfile
 
 @receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    """Create a UserProfile when a new User is created."""
+def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
-        with transaction.atomic():
-            UserProfile.objects.get_or_create(
-                user=instance,
-                defaults={'role': 'student'}  # Default role for new users
-            )
+        # Create a profile with the correct role
+        if instance.is_superuser:
+            UserProfile.objects.create(user=instance, role='admin')
+        else:
+            UserProfile.objects.create(user=instance, role='student')
+    else:
+        # If profile exists, update the role based on superuser status
+        if instance.is_superuser:
+            instance.userprofile.role = 'admin'
+        instance.userprofile.save()
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):

@@ -75,10 +75,18 @@ WSGI_APPLICATION = 'bawabati.wsgi.application'
 # Database (using SQLite by default, update as needed)
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'bawabati_db2',  # Your new database name
+        'USER': 'root',          # Your MySQL username
+        'PASSWORD': '',  # Your MySQL password
+        'HOST': 'localhost',     # Database server (localhost)
+        'PORT': '3306',          # Default MySQL port
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        }
     }
 }
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
